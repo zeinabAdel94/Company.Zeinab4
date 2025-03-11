@@ -1,3 +1,7 @@
+using Company.Zeinab4.BLL.Repostiors;
+using Company.Zeinab4.DAL.Data.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace Company.Zeinab4.PL
 {
     public class Program
@@ -8,6 +12,12 @@ namespace Company.Zeinab4.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<DepartmentRepostiory>();
+            builder.Services.AddDbContext<CompanyDbContext>(Options =>
+            {
+                Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+        });
 
             var app = builder.Build();
 
