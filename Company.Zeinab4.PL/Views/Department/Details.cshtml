@@ -1,0 +1,31 @@
+﻿
+@model Department
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1  class="text-primary">Details Page </h1>
+<br /> 
+<br /> 
+ <div>
+     <div class="my-2">
+         <label asp-for="Code " class=" col-form-label"></label>
+         <input  asp-for="Code " class=" form-control" readonly/>
+     </div> 
+     <div class="my-2">
+         <label asp-for="Name" class=" col-form-label"></label>
+         <input  asp-for="Name " class=" form-control" readonly/>
+     </div> 
+     <div class="my-2">
+         <label asp-for="CreateAt" class=" col-form-label"></label>
+         <input  asp-for="CreateAt " class=" form-control" readonly/>
+     </div>
+
+     <div class="my-2">
+         <a asp-action="Details" class="btn btn-warning mx-2" >Edit</a>
+         <a asp-action="index" class="btn btn-secondary"> BackToList </a>
+
+     </div>
+
+ </div>
+
