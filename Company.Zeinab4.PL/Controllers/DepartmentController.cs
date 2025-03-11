@@ -1,7 +1,9 @@
-﻿using Company.Zeinab4.BLL.Repostiors;
+﻿using System.Security.Policy;
+using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Modules;
 using Company.Zeinab4.PL.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Company.Zeinab4.PL.Controllers
 {
@@ -52,6 +54,15 @@ namespace Company.Zeinab4.PL.Controllers
            
 
             return View(model);
+        }
+
+
+        public IActionResult Details (int? Id )
+        {
+            if (Id is null) return BadRequest("Id is Invaild ");
+            var department = _departmentRepostiory.Get(Id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
+            return View(department);
         }
     }
 }
