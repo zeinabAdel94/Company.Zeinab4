@@ -25,12 +25,21 @@ namespace Company.Zeinab4.PL.Controllers
             return View(departments);
             
         }
+
+
+
+
+
         [HttpGet]
         public IActionResult Create()
         {
          
             return View();
         }
+
+
+
+
 
         [HttpPost]
         public IActionResult Create(CreateDepartmentDTO model)
@@ -56,23 +65,35 @@ namespace Company.Zeinab4.PL.Controllers
             return View(model);
         }
 
+
+
+
+
         [HttpGet]
-        public IActionResult Details (int? Id )
+        public IActionResult Details (int? Id,string viewName="Details" )
         {
             if (Id is null) return BadRequest("Id is Invaild ");
             var department = _departmentRepostiory.Get(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
-            return View(department);
+            return View(viewName,department);
         }
+
+
+
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            if (id is null) return BadRequest("Invaild Id ");
-            var department = _departmentRepostiory.Get(id.Value);
-            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{id}is not found " });
-            return View(department);
+            //if (id is null) return BadRequest("Invaild Id ");
+            //var department = _departmentRepostiory.Get(id.Value);
+            //if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{id}is not found " });
+            //return View(department);
+            return Details(id,"Edit");
         }
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id  ,Department department)
@@ -94,15 +115,22 @@ namespace Company.Zeinab4.PL.Controllers
            return View(department);
         }
 
+
+
         [HttpGet]
         public IActionResult Delete (int?Id )
         {
-            if (Id is null) return BadRequest("Invald id");
-            var department = _departmentRepostiory.Get(Id.Value);
-            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department eith id :{Id} is not found " });
-            return View(department);
+            //if (Id is null) return BadRequest("Invald id");
+            //var department = _departmentRepostiory.Get(Id.Value);
+            //if (department is null) return NotFound(new { StatusCode = 404, message = $"the department eith id :{Id} is not found " });
+            //return View(department);
+            return Details(Id, "Delete");
+            
 
         }
+
+
+
         [HttpPost]
         public IActionResult Delete( [FromRoute]int id  ,Department department)
         {
