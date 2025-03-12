@@ -56,7 +56,7 @@ namespace Company.Zeinab4.PL.Controllers
             return View(model);
         }
 
-
+        [HttpGet]
         public IActionResult Details (int? Id )
         {
             if (Id is null) return BadRequest("Id is Invaild ");
@@ -64,5 +64,62 @@ namespace Company.Zeinab4.PL.Controllers
             if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
             return View(department);
         }
-    }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null) return BadRequest("Invaild Id ");
+            var department = _departmentRepostiory.Get(id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{id}is not found " });
+            return View(department);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id  ,Department department)
+        {
+           if(ModelState.IsValid)
+            {
+                if (id == department.Id)
+                {
+                    var count = _departmentRepostiory.Update(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                }
+            }
+            
+         
+           return View(department);
+        }
+
+        [HttpGet]
+        public IActionResult Delete (int?Id )
+        {
+            if (Id is null) return BadRequest("Invald id");
+            var department = _departmentRepostiory.Get(Id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department eith id :{Id} is not found " });
+            return View(department);
+
+        }
+        [HttpPost]
+        public IActionResult Delete( [FromRoute]int id  ,Department department)
+        {
+           
+            if(ModelState.IsValid)
+            {
+                if (id != department.Id) return BadRequest("invaild Id ");
+                var count = _departmentRepostiory.Delete(department);
+                if(count>0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+           
+            return View(department);
+
+            }
+        }
 }
