@@ -7,11 +7,13 @@ using Company.Zeinab4.DAL.Modules;
 
 namespace Company.Zeinab4.BLL.Interfaces
 {
-  public interface IDepartmentRepostiory:IGenericRepositiory<Department>
+  public  interface IGenericRepositiory<T>where  T:BaseEntity
     {
-    
 
-
-
+        IEnumerable<T> GetAll();
+        T? Get(int Id);
+        int Add(T model);
+        int Update(T model);
+        int Delete(T model);
     }
 }
