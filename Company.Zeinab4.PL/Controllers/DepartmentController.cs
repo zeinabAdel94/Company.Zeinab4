@@ -84,10 +84,7 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            //if (id is null) return BadRequest("Invaild Id ");
-            //var department = _departmentRepostiory.Get(id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{id}is not found " });
-            //return View(department);
+         
             return Details(id,"Edit");
         }
 

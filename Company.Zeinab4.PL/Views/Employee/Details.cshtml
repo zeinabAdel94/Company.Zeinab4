@@ -1,0 +1,75 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="text-primary ">Details Of Employee </h1>
+<br /><br />
+<div>
+
+    <div>
+        <label asp-for="Name" class="col-form-label"></label>
+        <input asp-for="Name" class="form-control" name="Name"  readonly/>
+   
+    </div>
+
+    <div>
+        <label asp-for="Age" class="col-form-label"></label>
+        <input asp-for="Age" class="form-control" name="Age " readonly />
+
+    </div>
+
+    <div>
+        <label asp-for="Email" class="col-form-label"></label>
+        <input asp-for="Email" class="form-control" name="Email" readonly/>
+        <span asp-validation-for="Email" class="alert-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Address" class="col-form-label"></label>
+        <input asp-for="Address" class="form-control" name="Address" readonly/>
+        <span asp-validation-for="Address" class="alert-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="phone" class="col-form-label"></label>
+        <input asp-for="phone" class="form-control" name="phone" readonly />
+        <span asp-validation-for="phone" class="alert-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Salary" class="col-form-label"></label>
+        <input asp-for="Salary" class="form-control" name="Salary" readonly/>
+        <span asp-validation-for="Salary" class="alert-danger"></span>
+    </div>
+    <div>
+
+        <label asp-for="IsActive" class="col-form-label"></label>
+        <input asp-for="IsActive" class="form-check" name="IsActive"  readonly/>
+
+    </div>
+
+    <div>
+        <label asp-for="IsDeleted" class="col-form-label"></label>
+        <input type="checkbox" asp-for="IsDeleted" class="form-check" name="IsDeleted" readonly/>
+
+    </div>
+    <div>
+        <label asp-for="HiringDate" class="col-form-label"></label>
+        <input asp-for="HiringDate" class="form-control" name="HiringDate" readonly/>
+        <span asp-validation-for="HiringDate" class="alert-danger"></span>
+    </div>
+    <div>
+        <label asp-for="CreateAt" class="col-form-label"></label>
+        <input asp-for="CreateAt" class="form-control" name="CreateAt"  readonly/>
+        <span asp-validation-for="CreateAt" class="alert-danger"></span>
+    </div>
+    <div class="my-3">
+        <a asp-action="Details"  class="btn btn-warning">Edit</a>
+        <a asp-action="Index" asp-controller="Employee" class="btn btn-dark">Back To lis  </a>
+    </div>
+
+
+</div>
+
+
+
