@@ -7,12 +7,8 @@ using Company.Zeinab4.DAL.Modules;
 
 namespace Company.Zeinab4.BLL.Interfaces
 {
-   public interface IEmployeeRepostiory
+    public interface IEmployeeRepostiory : IGenericRepositiory<Employee>
     {
-      IEnumerable<Employee>  GetAll();
-       Employee? Get(int Id );
-       int  Add(Employee employee);
-       int  Update( Employee employee);
-       int Delete( Employee employee);
+
     }
 }

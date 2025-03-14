@@ -9,49 +9,11 @@ using Company.Zeinab4.DAL.Modules;
 
 namespace Company.Zeinab4.BLL.Repostiors
 {
-    public class EmployeeRepostiory : IEmployeeRepostiory
+    public class EmployeeRepostiory : GenericRepository<Employee>
     {
-        private readonly CompanyDbContext _Context;
-        public EmployeeRepostiory(CompanyDbContext companyDbContext)
+        public EmployeeRepostiory(CompanyDbContext companyDbContext) : base(companyDbContext)
         {
-            _Context = companyDbContext;
-            
+
         }
-
-        public IEnumerable<Employee> GetAll()
-        {
-            return _Context.Employees.ToList();
-            
-        }
-
-
-        public Employee? Get(int Id)
-        {
-            return _Context.Employees.Find(Id);
-        }
-        public int Add(Employee employee)
-        {
-            _Context.Employees.Add(employee);
-            return _Context.SaveChanges();
-        }
-
-
-        public int Update(Employee employee)
-        {
-            _Context.Employees.Update(employee);
-            return _Context.SaveChanges();
-        }
-
-        public int Delete(Employee employee)
-        {
-            _Context.Employees.Remove(employee);
-            return _Context.SaveChanges();
-        }
-
-
-
-
-
-
     }
 }

@@ -7,9 +7,9 @@ using Azure.Core.Pipeline;
 
 namespace Company.Zeinab4.DAL.Modules
 {
-   public  class Employee
+   public  class Employee:BaseEntity
     {
-        public int Id { get; set; }
+      
         public string Name  { get; set; }
         public int? Age { get; set; }
         public string Email { get; set; }
