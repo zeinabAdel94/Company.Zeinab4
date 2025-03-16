@@ -82,10 +82,16 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult Update(int? Id)
         {
-         
-            return Details(id,"Edit");
+
+            if (Id is null) return BadRequest("Id is Invaild ");
+            var department = _departmentRepostiory.Get(Id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
+
+
+            //return Details(id,"Edit");
+            return View(department);
         }
 
 
@@ -93,7 +99,7 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id  ,Department department)
+        public IActionResult Update([FromRoute] int id  ,Department department)
         {
            if(ModelState.IsValid)
             {

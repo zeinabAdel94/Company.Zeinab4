@@ -40,7 +40,7 @@ namespace Company.Zeinab4.PL.Controllers
             if(ModelState.IsValid)
             {
                 var employee = new Employee()
-                {
+                {   
                     Name = model.Name,
                     Age = model.Age,
                     Address = model.Address,
@@ -82,35 +82,54 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public IActionResult Update(int? id)
         {
-            return Details(id, "Update");
+            if (id is null) return BadRequest("Id is Invaild ");
+           var employee=  _employeeRepostiory.Get(id.Value);
+            if (employee is null) return NotFound(new { StatusCode = 404, message = $"The  Employee with id ={id} is  Not Found " });
+            var employeeDTO = new CreateEmployeeDTO()
+            {
+
+                Name = employee.Name,
+                Age = employee.Age,
+                Email = employee.Email,
+                Address = employee.Address,
+                phone=employee.phone,
+                Salary = employee.Salary,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                CreateAt = employee.CreateAt,
+                HiringDate = employee.HiringDate
+
+            };
+            return  View(employeeDTO);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update( [FromRoute]int?id ,Employee model)
+        public IActionResult Update( [FromRoute]int?id ,CreateEmployeeDTO model)
         {
-            //var employee = new Employee()
-            //{
-            //    Id=id.Value,
-            //    Name=model.Name,
-            //    Age=model.Age,
-            //    Email=model.Email,
-            //    Address=model.Address,
-            //    Salary=model.Salary,
-            //    IsActive=model.IsActive,
-            //    IsDeleted=model.IsDeleted,
-            //    CreateAt=model.CreateAt,
-            //    HiringDate=model.HiringDate
+            var employee = new Employee()
+            {
+                Id = id.Value,
+                Name = model.Name,
+                Age = model.Age,
+                Email = model.Email,
+                phone=model.phone,
+                Address = model.Address,
+                Salary = model.Salary,
+                IsActive = model.IsActive,
+                IsDeleted = model.IsDeleted,
+                CreateAt = model.CreateAt,
+                HiringDate = model.HiringDate
 
-            //};
+            };
 
 
             if (ModelState.IsValid)
             {
-                if (id ==model.Id)
+                if (id is not null)
                 {
 
-                    var count = _employeeRepostiory.Update(model);
+                    var count = _employeeRepostiory.Update(employee);
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));

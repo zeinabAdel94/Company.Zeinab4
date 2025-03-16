@@ -10,24 +10,7 @@
     <h2 class="text-primary">Create Department </h2>
 </div>
 <form asp-action="Create" >
-    <div class="my-3">
-        <label asp-for="Code" class="col-form-label"></label>
-        <input asp-for="Code" class="form-control"/>
-        <span asp-validation-for="Code" class=" alert-danger"></span>
-    </div>
-    <div class="my-3">
-        <label asp-for="Name" class="col-form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="alert-danger"></span>
-        
-    </div>
-
-    <div class="my-3">
-        <label asp-for="CreateAt" class="col-form-label"></label>
-        <input asp-for="CreateAt" class="form-control" />
-        <span asp-validation-for="CreateAt" class="alert-danger"></span>
-
-    </div>
+    <partial name="DepartmentPartialView/_CreateEditPartailView" />
 
     <div class=" my-3 ">
          <input type="submit" value=" Create " class="btn btn-primary mx-2"/>
@@ -39,3 +22,9 @@
  
 </form>
 
+@section ValidationSection
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
