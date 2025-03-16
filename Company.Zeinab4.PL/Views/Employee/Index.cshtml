@@ -5,6 +5,16 @@
 
 <h1 class=" text-primary my-3">All Employees</h1>
 <br /><br />
+@if(!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div>
+        @*   <p class="alert alert-success">@ViewData["Message"]</p> *@
+        @*     <p class="alert alert-success">@ViewBag.Message</p> *@
+        <p class="alert alert-info">@TempData["Message"]</p>
+    </div>
+
+}
+
 
 <div class="my-3">
     <a asp-action="Create" asp-controller="Employee" class="btn btn-primary"> Create Employee </a>
