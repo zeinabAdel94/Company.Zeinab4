@@ -23,6 +23,8 @@ namespace Company.Zeinab4.PL.Controllers
         public IActionResult Index()
         {
             var Employees = _employeeRepostiory.GetAll();
+            //ViewData["Message"] = "Hello From ViewDate ";
+            //ViewBag.Message = "Hello From  ViewBag ";
             return View(Employees);
         }
 
@@ -37,30 +39,38 @@ namespace Company.Zeinab4.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create( CreateEmployeeDTO model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var employee = new Employee()
-                {   
-                    Name = model.Name,
-                    Age = model.Age,
-                    Address = model.Address,
-                    Email = model.Email,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
-                    Salary = model.Salary,
-                    phone = model.phone
-                };
-
-             int  count =  _employeeRepostiory.Add(employee);
-                
-               if(count>0)
+                try
                 {
-                    return RedirectToAction(nameof(Index));
+                    var employee = new Employee()
+                    {
+                        Name = model.Name,
+                        Age = model.Age,
+                        Address = model.Address,
+                        Email = model.Email,
+                        IsActive = model.IsActive,
+                        IsDeleted = model.IsDeleted,
+                        HiringDate = model.HiringDate,
+                        CreateAt = model.CreateAt,
+                        Salary = model.Salary,
+                        phone = model.phone
+                    };
+
+                    int count = _employeeRepostiory.Add(employee);
+
+                    if (count > 0)
+                    {
+                        TempData["Message"] = "Employee Is Created :)";
+                        return RedirectToAction(nameof(Index));
+                    }
+
+
                 }
-
-
+                catch(Exception e)
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
             }
 
 
