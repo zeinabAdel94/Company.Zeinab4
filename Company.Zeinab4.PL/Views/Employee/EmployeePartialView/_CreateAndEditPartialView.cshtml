@@ -1,4 +1,8 @@
 ﻿@model CreateEmployeeDTO
+
+@{
+    var departments =new SelectList( ViewData["Departments"] as IEnumerable<Department>,"Id","Name");
+}
 <div>
     <label asp-for="Name" class="col-form-label"></label>
     <input asp-for="Name" class="form-control" name="Name" />
@@ -53,5 +57,13 @@
 <div>
     <label asp-for="CreateAt" class="col-form-label"></label>
     <input asp-for="CreateAt" class="form-control" name="CreateAt" />
+    <span asp-validation-for="CreateAt" class="alert-danger"></span>
+</div>
+
+<div>
+    <label asp-for="DepartmentName" class="col-form-label"></label>
+  <select asp-for="DepartmentName" asp-items="departments" class="form-control">
+    <option value="@null">---Select Department---</option>
+  </select>
     <span asp-validation-for="CreateAt" class="alert-danger"></span>
 </div>

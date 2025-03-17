@@ -1,5 +1,7 @@
+using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Data.Context;
+using Company.Zeinab4.DAL.Modules;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -13,7 +15,9 @@ namespace Company.Zeinab4.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+        
             builder.Services.AddScoped<DepartmentRepostiory>();
+        
             builder.Services.TryAddScoped<EmployeeRepostiory>();
             builder.Services.AddDbContext<CompanyDbContext>(Options =>
             {

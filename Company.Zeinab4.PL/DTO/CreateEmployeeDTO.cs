@@ -32,6 +32,8 @@ namespace Company.Zeinab4.PL.DTO
         [DisplayName("Date Of Creation ")]
         [Required (ErrorMessage = "Create At  Is Required")]
         public DateTime CreateAt { get; set; }
+        public string  DepartmentName { get; set; }
+        public int? DepartmentId { get; set; }
 
     }
 }

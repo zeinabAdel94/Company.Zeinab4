@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.DAL.Data.Context;
 using Company.Zeinab4.DAL.Modules;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company.Zeinab4.BLL.Repostiors
 {
@@ -22,11 +23,20 @@ namespace Company.Zeinab4.BLL.Repostiors
 
         public IEnumerable<T> GetAll()
         {
+            if(typeof(T)==typeof(Employee))
+            {
+                return(IEnumerable<T>) _Context.Employees.Include(E=>E.Department).ToList();
+            }
             return _Context.Set<T>().ToList();
         }
         public T? Get(int Id)
+            
         {
-            return _Context.Set<T>().Find(Id);
+            if (typeof(T) == typeof(Employee))
+            {
+               return  _Context.Employees.Include(E=>E.Department).FirstOrDefault(E=>E.Id==Id) as T;
+            }
+             return _Context.Set<T>().Find(Id);
         }
 
 
