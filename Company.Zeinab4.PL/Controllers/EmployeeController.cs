@@ -11,11 +11,12 @@ namespace Company.Zeinab4.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeRepostiory _employeeRepostiory;
+        private readonly DepartmentRepostiory _departmentRepostiory;
 
-        public EmployeeController(EmployeeRepostiory employeeRepostiory)
+        public EmployeeController(EmployeeRepostiory employeeRepostiory,DepartmentRepostiory departmentRepostiory)
         {
             _employeeRepostiory = employeeRepostiory;
-            
+           _departmentRepostiory = departmentRepostiory;
         }
 
 
@@ -23,14 +24,15 @@ namespace Company.Zeinab4.PL.Controllers
         public IActionResult Index()
         {
             var Employees = _employeeRepostiory.GetAll();
-            //ViewData["Message"] = "Hello From ViewDate ";
-            //ViewBag.Message = "Hello From  ViewBag ";
+      
             return View(Employees);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+            var departments = _departmentRepostiory.GetAll();
+            ViewData["Departments"] = departments;
             return View();
 
         }
@@ -54,7 +56,9 @@ namespace Company.Zeinab4.PL.Controllers
                         HiringDate = model.HiringDate,
                         CreateAt = model.CreateAt,
                         Salary = model.Salary,
-                        phone = model.phone
+                        phone = model.phone,
+                        DepartmentId=model.DepartmentId
+
                     };
 
                     int count = _employeeRepostiory.Add(employee);
@@ -81,17 +85,39 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public IActionResult Details(int? Id,string viewName="Details")
         {
+            var departments = _departmentRepostiory.GetAll();
+            ViewData["Departments"] = departments;
             if (Id is null) return BadRequest("Invaild Id ");
             var employee = _employeeRepostiory.Get(Id.Value);
             if (employee is null) return NotFound(new {StatusCode=404 , message =$"The  Employee with id ={Id} is  Not Found "});
-            
-            return View(viewName,employee);
+            var employeeDTo = new CreateEmployeeDTO()
+            {
+                Name = employee.Name,
+                Age = employee.Age,
+                Email = employee.Email,
+                Salary = employee.Salary,
+                CreateAt = employee.CreateAt,
+                HiringDate = employee.HiringDate,
+                Address = employee.Address,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                DepartmentId = employee?.DepartmentId,
+                DepartmentName = employee.Department.Name,
+                phone = employee.phone
+
+
+
+            };
+            return View(viewName,employeeDTo);
         }
 
 
         [HttpGet]
         public IActionResult Update(int? id)
         {
+            var departments = _departmentRepostiory.GetAll();
+            ViewData["Departments"] = departments;
+
             if (id is null) return BadRequest("Id is Invaild ");
            var employee=  _employeeRepostiory.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, message = $"The  Employee with id ={id} is  Not Found " });
@@ -107,7 +133,8 @@ namespace Company.Zeinab4.PL.Controllers
                 IsActive = employee.IsActive,
                 IsDeleted = employee.IsDeleted,
                 CreateAt = employee.CreateAt,
-                HiringDate = employee.HiringDate
+                HiringDate = employee.HiringDate,
+               DepartmentName=employee.Department.Name
 
             };
             return  View(employeeDTO);
@@ -129,8 +156,10 @@ namespace Company.Zeinab4.PL.Controllers
                 IsActive = model.IsActive,
                 IsDeleted = model.IsDeleted,
                 CreateAt = model.CreateAt,
-                HiringDate = model.HiringDate
-
+                HiringDate = model.HiringDate,
+                DepartmentId=model.DepartmentId,
+               
+               
             };
 
 

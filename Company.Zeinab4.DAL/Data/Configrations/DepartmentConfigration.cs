@@ -15,6 +15,7 @@ namespace Company.Zeinab4.DAL.Data.Configrations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.Property(D => D.Id).UseIdentityColumn(10, 10);
+            
         }
     }
 }
