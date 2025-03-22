@@ -7,11 +7,7 @@ using Company.Zeinab4.DAL.Modules;
 
 namespace Company.Zeinab4.BLL.Interfaces
 {
-  public interface IDepartmentRepostiory:IGenericRepositiory<Department>
+    public interface IDepartmentRepostiory : IGenericRepositiory<Department>
     {
-    
-
-
-
     }
 }
