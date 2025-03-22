@@ -23,6 +23,7 @@ namespace Company.Zeinab4.PL.Controllers
         {
             
             var departments= _departmentRepostiory.GetAll();
+          
             return View(departments);
             
         }
@@ -85,14 +86,7 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public IActionResult Update(int? Id)
         {
-
-            //if (Id is null) return BadRequest("Id is Invaild ");
-            //var department = _departmentRepostiory.Get(Id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
-
-
             return Details(Id, "Update");
-            //return View(department);
         }
 
 
@@ -100,23 +94,30 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id  ,Department department)
+        public IActionResult Update([FromRoute] int id  ,UpdateDepartmentDTO model)
         {
-           if(ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                if (id == department.Id)
+                var department = new Department()
                 {
-                    var count = _departmentRepostiory.Update(department);
-                    if (count > 0)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
+                    Id=id,
+                    Code=model.Code,
+                    Name=model.Name,
+                    CreateAt=model.CreateAt
 
+                };
+                int count = _departmentRepostiory.Update(department);
+                if (count > 0)
+                {
+                    return RedirectToAction(nameof(Index));
                 }
+
             }
             
-         
-           return View(department);
+                 
+            
+      
+            return View(model);
         }
 
 
@@ -136,22 +137,25 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Delete( [FromRoute]int id  ,Department department)
+        public IActionResult Delete([FromRoute] int id, Department department)
         {
-           
-            if(ModelState.IsValid)
-            {
-                if (id != department.Id) return BadRequest("invaild Id ");
-                var count = _departmentRepostiory.Delete(department);
-                if(count>0)
+           // if (ModelState.IsValid)
+           // {
+
+                if (id == department.Id)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var count = _departmentRepostiory.Delete(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
 
-            }
-           
-            return View(department);
+            //}
+                return View(department);
 
             }
+
         }
-}
+
+        }

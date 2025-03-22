@@ -9,6 +9,7 @@ namespace Company.Zeinab4.BLL.Interfaces
 {
     public interface IEmployeeRepostiory : IGenericRepositiory<Employee>
     {
+       
 
     }
 }

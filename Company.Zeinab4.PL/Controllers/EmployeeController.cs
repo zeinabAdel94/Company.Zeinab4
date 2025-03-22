@@ -90,25 +90,7 @@ namespace Company.Zeinab4.PL.Controllers
             if (Id is null) return BadRequest("Invaild Id ");
             var employee = _employeeRepostiory.Get(Id.Value);
             if (employee is null) return NotFound(new {StatusCode=404 , message =$"The  Employee with id ={Id} is  Not Found "});
-            var employeeDTo = new CreateEmployeeDTO()
-            {
-                Name = employee.Name,
-                Age = employee.Age,
-                Email = employee.Email,
-                Salary = employee.Salary,
-                CreateAt = employee.CreateAt,
-                HiringDate = employee.HiringDate,
-                Address = employee.Address,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                DepartmentId = employee?.DepartmentId,
-                DepartmentName = employee.Department.Name,
-                phone = employee.phone
-
-
-
-            };
-            return View(viewName,employeeDTo);
+            return View(viewName,employee);
         }
 
 
@@ -121,52 +103,38 @@ namespace Company.Zeinab4.PL.Controllers
             if (id is null) return BadRequest("Id is Invaild ");
            var employee=  _employeeRepostiory.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, message = $"The  Employee with id ={id} is  Not Found " });
-            var employeeDTO = new CreateEmployeeDTO()
-            {
-
-                Name = employee.Name,
-                Age = employee.Age,
-                Email = employee.Email,
-                Address = employee.Address,
-                phone=employee.phone,
-                Salary = employee.Salary,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                CreateAt = employee.CreateAt,
-                HiringDate = employee.HiringDate,
-               DepartmentName=employee.Department.Name
-
-            };
-            return  View(employeeDTO);
+            return  View(employee);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update( [FromRoute]int?id ,CreateEmployeeDTO model)
+        public IActionResult Update( [FromRoute]int?id ,UpdateEmployeeDTOcs model)
         {
-            var employee = new Employee()
-            {
-                Id = id.Value,
-                Name = model.Name,
-                Age = model.Age,
-                Email = model.Email,
-                phone=model.phone,
-                Address = model.Address,
-                Salary = model.Salary,
-                IsActive = model.IsActive,
-                IsDeleted = model.IsDeleted,
-                CreateAt = model.CreateAt,
-                HiringDate = model.HiringDate,
-                DepartmentId=model.DepartmentId,
-               
-               
-            };
+            
 
+            //if (ModelState.IsValid)
+            //{
+              
 
-            if (ModelState.IsValid)
-            {
                 if (id is not null)
                 {
+                    var employee = new Employee()
+                    {
+                        Id = id.Value,
+                        Name = model.Name,
+                        Age = model.Age,
+                        Email = model.Email,
+                        phone = model.phone,
+                        Address = model.Address,
+                        Salary = model.Salary,
+                        IsActive = model.IsActive,
+                        IsDeleted = model.IsDeleted,
+                        CreateAt = model.CreateAt,
+                        HiringDate = model.HiringDate,
+                        DepartmentId = model.DepartmentId,
+
+
+                    };
 
                     var count = _employeeRepostiory.Update(employee);
                     if (count > 0)
@@ -174,7 +142,7 @@ namespace Company.Zeinab4.PL.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
-                }
+                //}
             }
 
 
@@ -196,9 +164,9 @@ namespace Company.Zeinab4.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete( [FromRoute]int? id , Employee model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                if(id ==model.Id)
+                if (id ==model.Id)
                 {
                     var count = _employeeRepostiory.Delete(model);
                     if(count>0)
