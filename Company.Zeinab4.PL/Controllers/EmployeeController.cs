@@ -1,36 +1,64 @@
 ﻿using System.CodeDom;
+using AutoMapper;
 using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Modules;
 using Company.Zeinab4.PL.DTO;
+using Company.Zeinab4.PL.Helper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Protocol;
 
 namespace Company.Zeinab4.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly EmployeeRepostiory _employeeRepostiory;
-        private readonly DepartmentRepostiory _departmentRepostiory;
+        //private readonly EmployeeRepostiory _employeeRepostiory;
+       private readonly DepartmentRepostiory _departmentRepostiory;
 
-        public EmployeeController(EmployeeRepostiory employeeRepostiory,DepartmentRepostiory departmentRepostiory)
+
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public EmployeeController(
+            //EmployeeRepostiory employeeRepostiory,
+            DepartmentRepostiory departmentRepostiory,
+
+             IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
-            _employeeRepostiory = employeeRepostiory;
+           //_employeeRepostiory = employeeRepostiory;
            _departmentRepostiory = departmentRepostiory;
+
+
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string?SearchInput)
         {
-            var Employees = _employeeRepostiory.GetAll();
-      
-            return View(Employees);
+            IEnumerable<Employee> employees;
+            if(string.IsNullOrEmpty(SearchInput))
+            {
+                employees =_unitOfWork.EmployeeRepostiory.GetAll();
+
+        
+
+            }else
+            {
+                employees =_unitOfWork.EmployeeRepostiory.GetByName(SearchInput);
+             
+            }
+            return View(employees);
+
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+           // var departments =_unitOfWork.DepartmentRepostiory.GetAll();
             var departments = _departmentRepostiory.GetAll();
             ViewData["Departments"] = departments;
             return View();
@@ -45,23 +73,17 @@ namespace Company.Zeinab4.PL.Controllers
             {
                 try
                 {
-                    var employee = new Employee()
+                    if(model.Image is not null)
                     {
-                        Name = model.Name,
-                        Age = model.Age,
-                        Address = model.Address,
-                        Email = model.Email,
-                        IsActive = model.IsActive,
-                        IsDeleted = model.IsDeleted,
-                        HiringDate = model.HiringDate,
-                        CreateAt = model.CreateAt,
-                        Salary = model.Salary,
-                        phone = model.phone,
-                        DepartmentId=model.DepartmentId
+                      
+                      model.ImageName  =DocumentSetting.UploadFile(model.Image, "images");
+                    }
 
-                    };
+                  
+                     var employee=_mapper.Map<Employee>(model);
 
-                    int count = _employeeRepostiory.Add(employee);
+                     _unitOfWork.EmployeeRepostiory.Add(employee);
+                    var count = _unitOfWork.Complete();
 
                     if (count > 0)
                     {
@@ -88,7 +110,7 @@ namespace Company.Zeinab4.PL.Controllers
             var departments = _departmentRepostiory.GetAll();
             ViewData["Departments"] = departments;
             if (Id is null) return BadRequest("Invaild Id ");
-            var employee = _employeeRepostiory.Get(Id.Value);
+            var employee = _unitOfWork.EmployeeRepostiory.Get(Id.Value);
             if (employee is null) return NotFound(new {StatusCode=404 , message =$"The  Employee with id ={Id} is  Not Found "});
             return View(viewName,employee);
         }
@@ -101,49 +123,42 @@ namespace Company.Zeinab4.PL.Controllers
             ViewData["Departments"] = departments;
 
             if (id is null) return BadRequest("Id is Invaild ");
-           var employee=  _employeeRepostiory.Get(id.Value);
+           var employee=  _unitOfWork.EmployeeRepostiory.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, message = $"The  Employee with id ={id} is  Not Found " });
             return  View(employee);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update( [FromRoute]int?id ,UpdateEmployeeDTOcs model)
+        public IActionResult Update( [FromRoute]int?id ,CreateEmployeeDTO model)
         {
             
 
-            //if (ModelState.IsValid)
-            //{
-              
+            if (ModelState.IsValid)
+            {
+              if(model.ImageName is not null &&model.Image is not null)
+                {
+                    DocumentSetting.DeleteFile(model.ImageName, "images");
+                }
+              if(model.Image is not null)
+                {
+                    model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
+                }
 
                 if (id is not null)
                 {
-                    var employee = new Employee()
-                    {
-                        Id = id.Value,
-                        Name = model.Name,
-                        Age = model.Age,
-                        Email = model.Email,
-                        phone = model.phone,
-                        Address = model.Address,
-                        Salary = model.Salary,
-                        IsActive = model.IsActive,
-                        IsDeleted = model.IsDeleted,
-                        CreateAt = model.CreateAt,
-                        HiringDate = model.HiringDate,
-                        DepartmentId = model.DepartmentId,
+      
+                var employee = _mapper.Map<Employee>(model);
 
-
-                    };
-
-                    var count = _employeeRepostiory.Update(employee);
+                   _unitOfWork.EmployeeRepostiory.Update(employee);
+                var count = _unitOfWork.Complete();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
                     }
 
-                //}
-            }
+                }
+           }
 
 
             return View(model);
@@ -162,15 +177,21 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete( [FromRoute]int? id , Employee model)
+        public IActionResult Delete( [FromRoute]int? id ,CreateEmployeeDTO model)
         {
             if (ModelState.IsValid)
             {
-                if (id ==model.Id)
+                var employee = _mapper.Map<Employee>(model);
+                if (id ==employee.Id)
                 {
-                    var count = _employeeRepostiory.Delete(model);
-                    if(count>0)
+                    _unitOfWork.EmployeeRepostiory.Delete(employee);
+                    var count = _unitOfWork.Complete();
+                    if (count>0)
                     {
+                        if(model.ImageName is not null)
+                        {
+                            DocumentSetting.DeleteFile(model.ImageName, "images");
+                        }
                         return RedirectToAction(nameof(Index));
                     }
                 }

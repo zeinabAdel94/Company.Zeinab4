@@ -1,4 +1,5 @@
 ﻿using System.Security.Policy;
+using AutoMapper;
 using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Modules;
@@ -13,9 +14,15 @@ namespace Company.Zeinab4.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly DepartmentRepostiory _departmentRepostiory;
-        public DepartmentController( DepartmentRepostiory departmentRepostiory)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+
+
+        public DepartmentController( DepartmentRepostiory departmentRepostiory,IMapper mapper ,IUnitOfWork unitOfWork)
         {
             _departmentRepostiory = departmentRepostiory;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -48,15 +55,11 @@ namespace Company.Zeinab4.PL.Controllers
         {
             if(ModelState.IsValid) //Server Vaildat
             {
-              var  department = new Department()
-                {
-
-                    Code = model.Code,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt
-                };
-               var count = _departmentRepostiory.Add(department);
-                if(count>0)
+               
+              var department= _mapper.Map<Department>(model);
+                 _departmentRepostiory.Add(department);
+                var count = _unitOfWork.Complete();
+                if (count>0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -98,15 +101,10 @@ namespace Company.Zeinab4.PL.Controllers
         {
             if(ModelState.IsValid)
             {
-                var department = new Department()
-                {
-                    Id=id,
-                    Code=model.Code,
-                    Name=model.Name,
-                    CreateAt=model.CreateAt
-
-                };
-                int count = _departmentRepostiory.Update(department);
+                
+                var department = _mapper.Map<Department>(model);
+        _departmentRepostiory.Update(department);
+                var count = _unitOfWork.Complete();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -125,10 +123,7 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public IActionResult Delete (int?Id )
         {
-            //if (Id is null) return BadRequest("Invald id");
-            //var department = _departmentRepostiory.Get(Id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, message = $"the department eith id :{Id} is not found " });
-            //return View(department);
+         
             return Details(Id, "Delete");
             
 
@@ -144,7 +139,8 @@ namespace Company.Zeinab4.PL.Controllers
 
                 if (id == department.Id)
                 {
-                    var count = _departmentRepostiory.Delete(department);
+                     _departmentRepostiory.Delete(department);
+                var count = _unitOfWork.Complete();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));

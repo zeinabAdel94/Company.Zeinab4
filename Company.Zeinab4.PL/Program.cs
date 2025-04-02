@@ -1,7 +1,9 @@
+using Company.Zeinab4.BLL;
 using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Data.Context;
 using Company.Zeinab4.DAL.Modules;
+using Company.Zeinab4.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -18,12 +20,17 @@ namespace Company.Zeinab4.PL
         
             builder.Services.AddScoped<DepartmentRepostiory>();
         
-            builder.Services.TryAddScoped<EmployeeRepostiory>();
+            //builder.Services.TryAddScoped<EmployeeRepostiory>();
+
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddDbContext<CompanyDbContext>(Options =>
             {
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
         });
+            builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new DepartmentProfile()));
 
             var app = builder.Build();
 

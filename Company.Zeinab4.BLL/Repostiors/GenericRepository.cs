@@ -40,21 +40,21 @@ namespace Company.Zeinab4.BLL.Repostiors
         }
 
 
-        public int Add(T model)
+        public void Add(T model)
         {
             _Context.Set<T>().Add(model);
-            return _Context.SaveChanges();
+        
         }
-        public int Update(T model)
+        public void Update(T model)
         {
             _Context.Set<T>().Update(model);
-            return _Context.SaveChanges();
+         
         }
 
-        public int Delete(T model)
+        public void Delete(T model)
         {
             _Context.Set<T>().Remove(model);
-            return _Context.SaveChanges();
+            
         }
 
        
