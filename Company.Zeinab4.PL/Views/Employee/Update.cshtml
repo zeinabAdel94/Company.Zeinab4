@@ -1,13 +1,14 @@
-﻿@model Employee;
+﻿@model CreateEmployeeDTO;
 @{
     ViewData["Title"] = "Update";
 }
 
 <h1 class="text-primary">Update Employee </h1>
 <br /><br />
-<form asp-action="Update">
+<form asp-action="Update" enctype="multipart/form-data">
 
     <partial name="EmployeePartialView/_CreateAndEditPartialView.cshtml" />
+    <input asp-for="ImageName" hidden/>
     <div class="my-3">
       
         <input type="submit" value="Save" class="btn btn-warning" />

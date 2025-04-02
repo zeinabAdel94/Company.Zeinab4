@@ -8,7 +8,7 @@ namespace Company.Zeinab4.PL.DTO
         public string Code { get; set; }
         [Required(ErrorMessage ="Name Is Required !")]
         public string Name { get; set; }
-        [Required(ErrorMessage ="Date Of Creation IS Required !")]
-        public DateTime CreateAt { get; set; }
+        [Required(ErrorMessage = "Date Of Creation IS Required !")]
+        public DateTime CreateAt { get; set; } 
     }
 }

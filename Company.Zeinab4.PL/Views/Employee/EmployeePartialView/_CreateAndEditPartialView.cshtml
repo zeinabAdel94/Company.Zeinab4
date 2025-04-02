@@ -1,4 +1,4 @@
-﻿@model Employee;
+﻿@model CreateEmployeeDTO;
 
 @{
     var departments =new SelectList(ViewData["Departments"] as IEnumerable<Department>,"Id","Name");
@@ -17,7 +17,7 @@
 
 <div>
     <label asp-for="Email" class="col-form-label"></label>
-    <input asp-for="Email" class="form-control" name="Email" />
+    <input asp-for="Email" class="form-control"  />
     <span asp-validation-for="Email" class="alert-danger"></span>
 </div>
 <div>
@@ -28,35 +28,35 @@
 
 <div>
     <label asp-for="phone" class="col-form-label"></label>
-    <input asp-for="phone" class="form-control" name="phone" />
+    <input asp-for="phone" class="form-control"/>
     <span asp-validation-for="phone" class="alert-danger"></span>
 </div>
 
 <div>
     <label asp-for="Salary" class="col-form-label"></label>
-    <input asp-for="Salary" class="form-control" name="Salary" />
+    <input asp-for="Salary" class="form-control" />
     <span asp-validation-for="Salary" class="alert-danger"></span>
 </div>
 <div>
 
     <label asp-for="IsActive" class="col-form-label"></label>
-    <input asp-for="IsActive" class="form-check" name="IsActive" />
+    <input asp-for="IsActive" class="form-check"  />
 
 </div>
 
 <div>
     <label asp-for="IsDeleted" class="col-form-label"></label>
-    <input type="checkbox" asp-for="IsDeleted" class="form-check" name="IsDeleted" />
+    <input type="checkbox" asp-for="IsDeleted" class="form-check" />
 
 </div>
 <div>
     <label asp-for="HiringDate" class="col-form-label"></label>
-    <input asp-for="HiringDate" class="form-control" name="HiringDate" />
+    <input asp-for="HiringDate" class="form-control" />
     <span asp-validation-for="HiringDate" class="alert-danger"></span>
 </div>
 <div>
     <label asp-for="CreateAt" class="col-form-label"></label>
-    <input asp-for="CreateAt" class="form-control" name="CreateAt" />
+    <input asp-for="CreateAt" class="form-control" />
     <span asp-validation-for="CreateAt" class="alert-danger"></span>
 </div>
 
@@ -65,5 +65,10 @@
     <select asp-for="DepartmentId" asp-items="departments" class="form-control">
     <option value="@null">---Select Department---</option>
   </select>
-    <span asp-validation-for="CreateAt" class="alert-danger"></span>
+  
+</div>
+<div>
+    <label asp-for="Image" class="col-form-label"></label>
+    <input asp-for="Image" class="form-control"  />
+
 </div>

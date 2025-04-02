@@ -12,8 +12,8 @@ namespace Company.Zeinab4.BLL.Interfaces
 
         IEnumerable<TEninty> GetAll();
         TEninty? Get(int Id);
-        int Add(TEninty model);
-        int Update(TEninty model);
-        int Delete(TEninty model);
+        void Add(TEninty model);
+        void Update(TEninty model);
+        void Delete(TEninty model);
     }
 }

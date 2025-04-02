@@ -1,5 +1,5 @@
 ﻿
-@model Employee;
+@model CreateEmployeeDTO;
 @{
     var departments = new SelectList(ViewData["Departments"] as  IEnumerable<Department> ,"Id","Name");
 }
@@ -18,24 +18,24 @@
 <div>
     <label asp-for="Email" class="col-form-label"></label>
     <input asp-for="Email" class="form-control" name="Email" readonly />
-    <span asp-validation-for="Email" class="alert-danger"></span>
+ 
 </div>
 <div>
     <label asp-for="Address" class="col-form-label"></label>
     <input asp-for="Address" class="form-control" name="Address" readonly />
-    <span asp-validation-for="Address" class="alert-danger"></span>
+ 
 </div>
 
 <div>
     <label asp-for="phone" class="col-form-label"></label>
     <input asp-for="phone" class="form-control" name="phone" readonly />
-    <span asp-validation-for="phone" class="alert-danger"></span>
+ 
 </div>
 
 <div>
     <label asp-for="Salary" class="col-form-label"></label>
     <input asp-for="Salary" class="form-control" name="Salary" readonly />
-    <span asp-validation-for="Salary" class="alert-danger"></span>
+    
 </div>
 <div>
 
@@ -52,12 +52,12 @@
 <div>
     <label asp-for="HiringDate" class="col-form-label"></label>
     <input asp-for="HiringDate" class="form-control" name="HiringDate" readonly />
-    <span asp-validation-for="HiringDate" class="alert-danger"></span>
+
 </div>
 <div>
     <label asp-for="CreateAt" class="col-form-label"></label>
     <input asp-for="CreateAt" class="form-control" name="CreateAt" readonly />
-    <span asp-validation-for="CreateAt" class="alert-danger"></span>
+  
 </div>
 
 <div>
@@ -65,5 +65,10 @@
     <select asp-for="DepartmentId" asp-items="departments" class="form-control" disabled>
         <option value="@null">---Select Department---</option>
     </select>
-    <span asp-validation-for="CreateAt" class="alert-danger"></span>
+  
+</div>
+<div>
+    <label asp-for="Image" class="col-form-label"></label>
+    <input asp-for="Image" class="form-control"  readonly />
+
 </div>
