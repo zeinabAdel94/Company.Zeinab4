@@ -19,9 +19,9 @@ namespace Company.Zeinab4.BLL.Repostiors
             _Context = companyDbContext;
         }
 
-        public List<Employee> GetByName(string name)
+        public async Task< List<Employee> >GetByNameAsync(string name)
         {
-            return  _Context.Employees.Include(E=>E.Department).Where(E => E.Name.ToLower().Contains(name.ToLower())).ToList();
+            return await _Context.Employees.Include(E=>E.Department).Where(E => E.Name.ToLower().Contains(name.ToLower())).ToListAsync();
 
 
         }

@@ -21,28 +21,30 @@ namespace Company.Zeinab4.BLL.Repostiors
 
 
 
-        public IEnumerable<T> GetAll()
+        public async Task< IEnumerable<T>> GetAllAsync()
         {
             if(typeof(T)==typeof(Employee))
             {
-                return(IEnumerable<T>) _Context.Employees.Include(E=>E.Department).ToList();
+                return(IEnumerable<T>)await _Context.Employees.Include(E=>E.Department).ToListAsync();
             }
-            return _Context.Set<T>().ToList();
+            return await _Context.Set<T>().ToListAsync();
         }
-        public T? Get(int Id)
+
+
+        public async  Task<T?> GetAsync(int Id)
             
         {
             if (typeof(T) == typeof(Employee))
             {
-               return  _Context.Employees.Include(E=>E.Department).FirstOrDefault(E=>E.Id==Id) as T;
+               return await _Context.Employees.Include(E=>E.Department).FirstOrDefaultAsync(E=>E.Id==Id) as T;
             }
              return _Context.Set<T>().Find(Id);
         }
 
 
-        public void Add(T model)
+        public async Task AddAsync(T model)
         {
-            _Context.Set<T>().Add(model);
+           await _Context.Set<T>().AddAsync(model);
         
         }
         public void Update(T model)
@@ -57,8 +59,5 @@ namespace Company.Zeinab4.BLL.Repostiors
             
         }
 
-       
-
-      
     }
 }
