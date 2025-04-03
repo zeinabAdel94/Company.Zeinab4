@@ -9,7 +9,7 @@ namespace Company.Zeinab4.BLL.Interfaces
 {
     public interface IEmployeeRepostiory : IGenericRepositiory<Employee>
     {
-        List<Employee> GetByName(string name);
+     Task<List<Employee>> GetByNameAsync(string name);
        
 
     }

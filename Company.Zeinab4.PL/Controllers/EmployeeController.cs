@@ -37,18 +37,18 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Index(string?SearchInput)
+        public  async  Task <IActionResult> Index(string?SearchInput)
         {
             IEnumerable<Employee> employees;
             if(string.IsNullOrEmpty(SearchInput))
             {
-                employees =_unitOfWork.EmployeeRepostiory.GetAll();
+                employees = await _unitOfWork.EmployeeRepostiory.GetAllAsync();
 
         
 
             }else
             {
-                employees =_unitOfWork.EmployeeRepostiory.GetByName(SearchInput);
+                employees =await  _unitOfWork.EmployeeRepostiory.GetByNameAsync(SearchInput);
              
             }
             return View(employees);
@@ -56,18 +56,21 @@ namespace Company.Zeinab4.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async  Task<IActionResult> Create()
         {
            // var departments =_unitOfWork.DepartmentRepostiory.GetAll();
-            var departments = _departmentRepostiory.GetAll();
+            var departments =await  _departmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
             return View();
 
         }
 
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create( CreateEmployeeDTO model)
+        public async Task< IActionResult> Create( CreateEmployeeDTO model)
         {
             if (ModelState.IsValid)
             {
@@ -81,9 +84,8 @@ namespace Company.Zeinab4.PL.Controllers
 
                   
                      var employee=_mapper.Map<Employee>(model);
-
-                     _unitOfWork.EmployeeRepostiory.Add(employee);
-                    var count = _unitOfWork.Complete();
+                    await _unitOfWork.EmployeeRepostiory.AddAsync(employee);
+                     var count =await _unitOfWork.CompleteAsync();
 
                     if (count > 0)
                     {
@@ -104,33 +106,37 @@ namespace Company.Zeinab4.PL.Controllers
 
         }
 
+
+
+
+
         [HttpGet]
-        public IActionResult Details(int? Id,string viewName="Details")
+        public async  Task <IActionResult> Details(int? Id,string viewName="Details")
         {
-            var departments = _departmentRepostiory.GetAll();
+            var departments =await _departmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
             if (Id is null) return BadRequest("Invaild Id ");
-            var employee = _unitOfWork.EmployeeRepostiory.Get(Id.Value);
+            var employee =await _unitOfWork.EmployeeRepostiory.GetAsync(Id.Value);
             if (employee is null) return NotFound(new {StatusCode=404 , message =$"The  Employee with id ={Id} is  Not Found "});
             return View(viewName,employee);
         }
 
 
         [HttpGet]
-        public IActionResult Update(int? id)
+        public async  Task<IActionResult> Update(int? id)
         {
-            var departments = _departmentRepostiory.GetAll();
+            var departments =await _departmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
 
             if (id is null) return BadRequest("Id is Invaild ");
-           var employee=  _unitOfWork.EmployeeRepostiory.Get(id.Value);
+           var employee=await  _unitOfWork.EmployeeRepostiory.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, message = $"The  Employee with id ={id} is  Not Found " });
             return  View(employee);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update( [FromRoute]int?id ,CreateEmployeeDTO model)
+        public async Task< IActionResult>Update( [FromRoute]int?id ,CreateEmployeeDTO model)
         {
             
 
@@ -151,7 +157,7 @@ namespace Company.Zeinab4.PL.Controllers
                 var employee = _mapper.Map<Employee>(model);
 
                    _unitOfWork.EmployeeRepostiory.Update(employee);
-                var count = _unitOfWork.Complete();
+                var count =await _unitOfWork.CompleteAsync();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -164,12 +170,13 @@ namespace Company.Zeinab4.PL.Controllers
             return View(model);
         }
 
+      
         [HttpGet]
-        public IActionResult Delete(int? id )
+        public async Task< IActionResult> Delete(int? id )
         {
             
    
-            return Details(id, "Delete");
+            return await Details(id, "Delete");
             
 
         }
@@ -177,7 +184,7 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete( [FromRoute]int? id ,CreateEmployeeDTO model)
+        public async Task< IActionResult> Delete( [FromRoute]int? id ,CreateEmployeeDTO model)
         {
             if (ModelState.IsValid)
             {
@@ -185,7 +192,7 @@ namespace Company.Zeinab4.PL.Controllers
                 if (id ==employee.Id)
                 {
                     _unitOfWork.EmployeeRepostiory.Delete(employee);
-                    var count = _unitOfWork.Complete();
+                    var count =await _unitOfWork.CompleteAsync();
                     if (count>0)
                     {
                         if(model.ImageName is not null)
@@ -196,7 +203,7 @@ namespace Company.Zeinab4.PL.Controllers
                     }
                 }
             }
-            return Details(id, "Delete");
+            return await Details(id, "Delete");
 
         }
     }

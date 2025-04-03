@@ -26,10 +26,10 @@ namespace Company.Zeinab4.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task< IActionResult> Index()
         {
             
-            var departments= _departmentRepostiory.GetAll();
+            var departments=await _departmentRepostiory.GetAllAsync();
           
             return View(departments);
             
@@ -51,14 +51,14 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDTO model)
+        public async Task< IActionResult> Create(CreateDepartmentDTO model)
         {
             if(ModelState.IsValid) //Server Vaildat
             {
                
               var department= _mapper.Map<Department>(model);
-                 _departmentRepostiory.Add(department);
-                var count = _unitOfWork.Complete();
+                await _departmentRepostiory.AddAsync(department);
+                var count =await _unitOfWork.CompleteAsync();
                 if (count>0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -75,10 +75,10 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Details (int? Id,string viewName="Details" )
+        public async Task< IActionResult> Details (int? Id,string viewName="Details" )
         {
             if (Id is null) return BadRequest("Id is Invaild ");
-            var department = _departmentRepostiory.Get(Id.Value);
+            var department =await _departmentRepostiory.GetAsync(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
             return View(viewName,department);
         }
@@ -87,9 +87,9 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Update(int? Id)
+        public async  Task< IActionResult> Update(int? Id)
         {
-            return Details(Id, "Update");
+            return await Details(Id, "Update");
         }
 
 
@@ -97,14 +97,14 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id  ,UpdateDepartmentDTO model)
+        public async Task< IActionResult> Update([FromRoute] int id  ,UpdateDepartmentDTO model)
         {
             if(ModelState.IsValid)
             {
                 
                 var department = _mapper.Map<Department>(model);
-        _departmentRepostiory.Update(department);
-                var count = _unitOfWork.Complete();
+                _departmentRepostiory.Update(department);
+                var count =await _unitOfWork.CompleteAsync();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -121,10 +121,10 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Delete (int?Id )
+        public async  Task <IActionResult> Delete (int?Id )
         {
          
-            return Details(Id, "Delete");
+            return await Details(Id, "Delete");
             
 
         }
@@ -132,7 +132,7 @@ namespace Company.Zeinab4.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Delete([FromRoute] int id, Department department)
+        public async Task< IActionResult >Delete([FromRoute] int id, Department department)
         {
            // if (ModelState.IsValid)
            // {
@@ -140,7 +140,7 @@ namespace Company.Zeinab4.PL.Controllers
                 if (id == department.Id)
                 {
                      _departmentRepostiory.Delete(department);
-                var count = _unitOfWork.Complete();
+                var count =await _unitOfWork.CompleteAsync();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
