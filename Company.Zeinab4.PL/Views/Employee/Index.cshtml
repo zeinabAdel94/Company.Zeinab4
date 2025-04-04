@@ -24,6 +24,7 @@
     </form>
 
 </div>
+
 @if(!string.IsNullOrEmpty(TempData["Message"] as string))
 {
     <div>
@@ -89,7 +90,7 @@
                     }
                 
                     
-                    <partial name="_ButtonPartialView" model="@item.Id" />
+                    <partial name="_ButtonPartialView" model="@item.Id.ToString()" />
                 </tr>
             }
         </tbody>
