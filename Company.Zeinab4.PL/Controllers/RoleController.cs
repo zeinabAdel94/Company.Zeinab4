@@ -144,7 +144,7 @@ namespace Company.Zeinab4.PL.Controllers
                     if (id != model.Id) return BadRequest("InValid Oparation");
                     var role  = await _roleManager.FindByIdAsync(id);
                     if (role is null) return BadRequest("invaild opration ");
-                var roleResult = await _roleManager.FindByNameAsync(role.Name);
+                 var roleResult = await _roleManager.FindByNameAsync(model.Name);
                if(roleResult is null)
                 {
                     role.Name = model.Name;
