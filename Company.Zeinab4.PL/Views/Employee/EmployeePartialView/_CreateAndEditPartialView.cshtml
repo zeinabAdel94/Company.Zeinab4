@@ -1,8 +1,16 @@
-﻿@model CreateEmployeeDTO;
+﻿
+
+@model CreateEmployeeDTO;
 
 @{
     var departments =new SelectList(ViewData["Departments"] as IEnumerable<Department>,"Id","Name");
 }
+@* @inject IDepartmentRepository _departmentRepository
+
+@{
+
+     departments = new SelectList(await _departmentRepository.GetAllAsync(), "Id", "Name");
+} *@
 <div>
     <label asp-for="Name" class="col-form-label"></label>
     <input asp-for="Name" class="form-control" name="Name" />
@@ -67,6 +75,8 @@
   </select>
   
 </div>
+
+
 <div>
     <label asp-for="Image" class="col-form-label"></label>
     <input asp-for="Image" class="form-control"  />

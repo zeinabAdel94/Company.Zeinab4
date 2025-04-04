@@ -1,0 +1,35 @@
+﻿@model SingInDTO
+@{
+    ViewData["Title"] = "SingIn";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="main-agileinfo">
+	<div class="agileits-top">
+		<div asp-validation-summary="All" class="alert alert-danger"></div>
+		<form asp-action="SingIn">
+			<input class="text email" type="email" asp-for="Email" placeholder="Email" required>
+			<input class="text" type="password" asp-for="Password" placeholder="Password" required>
+
+			<div class="wthree-text">
+				<label class="anim">
+					<input asp-for="RemmberMe" class="checkbox" required>
+					<span>Remmber Me</span>
+				</label>
+				<div class="clear"></div>
+			</div>
+
+			<input type="submit" value="SIGIn">
+		</form>
+		<p>Do you  have an Account? <a asp-action="SingUp">Create Account !</a></p>
+		<p><a asp-action="ForgetPassword">Forget Password  !</a></p>
+	</div>
+</div>
+@section SectionVailidation {
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
+
+

@@ -1,0 +1,30 @@
+﻿
+
+@model UserToReturnDTO;
+
+
+<div>
+    <label asp-for="UserName" class="col-form-label"></label>
+    <input asp-for="UserName" class="form-control"  />
+    <span asp-validation-for="UserName" class="alert-danger"></span>
+</div>
+
+<div>
+    <label asp-for="FirstName" class="col-form-label"></label>
+    <input asp-for="FirstName" class="form-control"  />
+
+</div>
+
+<div>
+    <label asp-for="LastName" class="col-form-label"></label>
+    <input asp-for="LastName" class="form-control"  />
+    <span asp-validation-for="LastName" class="alert-danger"></span>
+</div>
+<div>
+    <label asp-for="Eamil" class="col-form-label"></label>
+    <input asp-for="Eamil" class="form-control" />
+    <span asp-validation-for="Eamil" class="alert-danger"></span>
+</div>
+
+
+

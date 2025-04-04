@@ -1,0 +1,19 @@
+﻿@model RoleDTO
+
+<h1 class="text-danger">Delete Role </h1>
+<br />
+<br />
+
+<form asp-action="Delete">
+    <partial name="RolePartialView/DetailsDeletepartialView.cshtml" />
+   
+  
+    <div class="my-3">
+        <input type="submit" asp-route-id="@Model.Id.ToString()" value="Delete" class="btn btn-danger mx-2" />
+        <a asp-action="Index" asp-controller="Role" class="btn btn-dark">Back To lis  </a>
+    </div>
+
+
+</form>
+
+

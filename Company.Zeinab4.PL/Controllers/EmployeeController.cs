@@ -5,30 +5,30 @@ using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Modules;
 using Company.Zeinab4.PL.DTO;
 using Company.Zeinab4.PL.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Protocol;
 
 namespace Company.Zeinab4.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
-        //private readonly EmployeeRepostiory _employeeRepostiory;
-       private readonly DepartmentRepostiory _departmentRepostiory;
+      
+    
 
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EmployeeController(
-            //EmployeeRepostiory employeeRepostiory,
-            DepartmentRepostiory departmentRepostiory,
-
-             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IUnitOfWork unitOfWork,
+            IMapper mapper
+            )
         {
-           //_employeeRepostiory = employeeRepostiory;
-           _departmentRepostiory = departmentRepostiory;
+        
+        
 
 
             _unitOfWork = unitOfWork;
@@ -58,8 +58,8 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public async  Task<IActionResult> Create()
         {
-           // var departments =_unitOfWork.DepartmentRepostiory.GetAll();
-            var departments =await  _departmentRepostiory.GetAllAsync();
+        
+            var departments =await  _unitOfWork.DepartmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
             return View();
 
@@ -113,7 +113,7 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public async  Task <IActionResult> Details(int? Id,string viewName="Details")
         {
-            var departments =await _departmentRepostiory.GetAllAsync();
+            var departments =await _unitOfWork.DepartmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
             if (Id is null) return BadRequest("Invaild Id ");
             var employee =await _unitOfWork.EmployeeRepostiory.GetAsync(Id.Value);
@@ -125,7 +125,7 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpGet]
         public async  Task<IActionResult> Update(int? id)
         {
-            var departments =await _departmentRepostiory.GetAllAsync();
+            var departments =await _unitOfWork.DepartmentRepostiory.GetAllAsync();
             ViewData["Departments"] = departments;
 
             if (id is null) return BadRequest("Id is Invaild ");

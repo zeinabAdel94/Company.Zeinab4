@@ -4,6 +4,7 @@ using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Data.Context;
 using Company.Zeinab4.DAL.Modules;
 using Company.Zeinab4.PL.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -31,7 +32,15 @@ namespace Company.Zeinab4.PL
         });
             builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
             builder.Services.AddAutoMapper(M => M.AddProfile(new DepartmentProfile()));
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<CompanyDbContext>()
+                .AddDefaultTokenProviders();
 
+            builder.Services.ConfigureApplicationCookie(Config=>
+            {
+                Config.LoginPath = "/Account/SingIn";
+
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -46,6 +55,8 @@ namespace Company.Zeinab4.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
         
 

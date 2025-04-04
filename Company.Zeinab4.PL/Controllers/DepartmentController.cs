@@ -4,23 +4,25 @@ using Company.Zeinab4.BLL.Interfaces;
 using Company.Zeinab4.BLL.Repostiors;
 using Company.Zeinab4.DAL.Modules;
 using Company.Zeinab4.PL.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Company.Zeinab4.PL.Controllers
 {
+    [Authorize]
     //MVC Controller 
 
     public class DepartmentController : Controller
     {
-        private readonly DepartmentRepostiory _departmentRepostiory;
+        
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public DepartmentController( DepartmentRepostiory departmentRepostiory,IMapper mapper ,IUnitOfWork unitOfWork)
+        public DepartmentController(IMapper mapper ,IUnitOfWork unitOfWork)
         {
-            _departmentRepostiory = departmentRepostiory;
+            
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -29,7 +31,7 @@ namespace Company.Zeinab4.PL.Controllers
         public async Task< IActionResult> Index()
         {
             
-            var departments=await _departmentRepostiory.GetAllAsync();
+        var departments=await _unitOfWork.DepartmentRepostiory.GetAllAsync();
           
             return View(departments);
             
@@ -57,7 +59,7 @@ namespace Company.Zeinab4.PL.Controllers
             {
                
               var department= _mapper.Map<Department>(model);
-                await _departmentRepostiory.AddAsync(department);
+                await _unitOfWork.DepartmentRepostiory.AddAsync(department);
                 var count =await _unitOfWork.CompleteAsync();
                 if (count>0)
                 {
@@ -78,7 +80,7 @@ namespace Company.Zeinab4.PL.Controllers
         public async Task< IActionResult> Details (int? Id,string viewName="Details" )
         {
             if (Id is null) return BadRequest("Id is Invaild ");
-            var department =await _departmentRepostiory.GetAsync(Id.Value);
+            var department =await _unitOfWork.DepartmentRepostiory.GetAsync(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, message = $"the department with id :{Id}is not found " });
             return View(viewName,department);
         }
@@ -103,7 +105,7 @@ namespace Company.Zeinab4.PL.Controllers
             {
                 
                 var department = _mapper.Map<Department>(model);
-                _departmentRepostiory.Update(department);
+                _unitOfWork.DepartmentRepostiory.Update(department);
                 var count =await _unitOfWork.CompleteAsync();
                 if (count > 0)
                 {
@@ -134,12 +136,12 @@ namespace Company.Zeinab4.PL.Controllers
         [HttpPost]
         public async Task< IActionResult >Delete([FromRoute] int id, Department department)
         {
-           // if (ModelState.IsValid)
-           // {
+            if (ModelState.IsValid)
+            {
 
                 if (id == department.Id)
                 {
-                     _departmentRepostiory.Delete(department);
+                     _unitOfWork.DepartmentRepostiory.Delete(department);
                 var count =await _unitOfWork.CompleteAsync();
                     if (count > 0)
                     {
@@ -147,7 +149,7 @@ namespace Company.Zeinab4.PL.Controllers
                     }
                 }
 
-            //}
+            }
                 return View(department);
 
             }
