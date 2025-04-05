@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Identity.Client;
+using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 
 namespace Company.Zeinab4.PL.Controllers
@@ -92,40 +93,52 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update([FromRoute] string? id, UserToReturnDTO model)
+        public async Task<IActionResult> Update([FromRoute] string id, UserToReturnDTO model)
         {
-
-
-            if (ModelState.IsValid)
+            try
             {
-
-                if (id != model.Id) return BadRequest("InValid Oparation");
-                var user =await _userManager.FindByIdAsync(id);
-                if (user is null) return BadRequest("invaild opration ");
-                user.UserName = model.UserName;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Email = model.Eamil;
-              var result =await  _userManager.UpdateAsync(user);
-
-                if(result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
+
+                    if (id != model.Id) return BadRequest("InValid Oparation");
+                    var user = await _userManager.FindByIdAsync(id);
+                    if (user is null) return BadRequest("invaild opration ");
+                    user.UserName = model.UserName;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Eamil;
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+
+
+
+
                 }
-                
 
-           
+            }
+            catch(Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+               
 
-              
             }
 
 
+
+
             return View(model);
+
+
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> Delete(string? id)
+        public async Task<IActionResult> Delete(string id)
         {
 
 
@@ -137,7 +150,7 @@ namespace Company.Zeinab4.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete([FromRoute] string? id, UserToReturnDTO model)
+        public async Task<IActionResult> Delete([FromRoute] string id, UserToReturnDTO model)
         {
 
             if (ModelState.IsValid)
